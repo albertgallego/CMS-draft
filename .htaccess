@@ -1,0 +1,4 @@
+RewriteEngine on
+
+RewriteRule ^page/([^/]*)/([^/]*)$ /index.php?language=$1&section=$2 [L]
+ 
