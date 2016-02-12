@@ -1,5 +1,7 @@
 <?php
 header('Content-Type: text/html; charset=latin9');
+header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
+header("Expires: Sat, 26 Jul 1997 05:00:00 GMT"); // Date in the past
 // set the default timezone to use. Available since PHP 5.1
 date_default_timezone_set('Europe/Madrid');
 $link = new mysqli('codigironanet.ipagemysql.com', 'eguser','2lexivore','english_girona');
@@ -80,6 +82,9 @@ else {
         <title><?= $conf['title']; ?></title>
     </head>
     <body>
+    <?php
+        echo "<!-- Analytics -->\n";
+        include_once("actions/analytics.tracking.php"); ?>
         <!-- The drawer is always open in large screens. The header is always shown,
        even in small screens. -->
      <div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer
