@@ -35,7 +35,7 @@ if ($stmt2 = $link->prepare($Site)) {
     $stmt2->execute();
 
     /* bind result variables */
-    $stmt2->bind_result($id, $defLang, $home, $title,$logo);
+    $stmt2->bind_result($id, $defLang, $home, $title,$logo, $facebook, $twitter, $pinterest, $youtube);
 
     /* fetch values */
     $stmt2->fetch();
@@ -43,6 +43,10 @@ if ($stmt2 = $link->prepare($Site)) {
     $conf['home'] = $home;
     $conf['title']=$title;
     $conf['logo']=$logo;
+    $conf['facebook']=$facebook;
+    $conf['twitter']=$twitter;
+    $conf['pinterest']=$pinterest;
+    $conf['youtube']=$youtube;
 
     session_start();
 
@@ -93,8 +97,21 @@ else {
 
          <div class="mdl-layout__header-row" style='margin-top:15px;'>
              <div class='social' style='position:relative; top:-15px;'>
-             <label class='mdl-button mdl-js-button mdl-button--icon'><a href="https://www.facebook.com/englishgironaprofessionalteachers" target="_blank"><i class="mdi mdi-facebook" style="padding-left:5px;margin-right:5px;font-size:20px; position:relative; top:-2px; color:#FFF;"></i></a></label>
-                 <label class='mdl-button mdl-js-button mdl-button--icon'><a href="https://twitter.com/EnglishGirona" target="_blank"><i class="mdi mdi-twitter" style="padding-left:5px;margin-right:5px;font-size:20px; position:relative; top:-2px; color:#FFF;"></i></a></label>
+             <?php
+                 if($conf['facebook']!='') {
+                    echo '<label class="mdl-button mdl-js-button mdl-button--icon"><a href="' . $conf['facebook'] . '" target="_blank"><i class="mdi mdi-facebook" style="padding-left:5px;margin-right:5px;font-size:20px; position:relative; top:-2px; color:#FFF;"></i></a></label>';
+                 }
+                 if($conf['twitter']!='') {
+                     echo '<label class="mdl-button mdl-js-button mdl-button--icon"><a href="'.$conf['twitter'].'" target="_blank"><i class="mdi mdi-twitter" style="padding-left:5px;margin-right:5px;font-size:20px; position:relative; top:-2px; color:#FFF;"></i></a></label>';
+                 }
+                 if($conf['pinterest']!='') {
+                     echo '<label class="mdl-button mdl-js-button mdl-button--icon"><a href="'.$conf['pinterest'].'" target="_blank"><i class="mdi mdi-pinterest" style="padding-left:5px;margin-right:5px;font-size:20px; position:relative; top:-2px; color:#FFF;"></i></a></label>';
+                 }
+                 if($conf['youtube']!='') {
+                     echo '<label class="mdl-button mdl-js-button mdl-button--icon"><a href="'.$conf['youtube'].'" target="_blank"><i class="mdi mdi-youtube" style="padding-left:5px;margin-right:5px;font-size:20px; position:relative; top:-2px; color:#FFF;"></i></a></label>';
+                 }
+                 ?>
+
             </div>
            <div class="mdl-layout-spacer"></div>
            <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable
