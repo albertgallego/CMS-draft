@@ -1,11 +1,12 @@
 <?php
+/* Database connection: $link has a mysqli object */
+require_once("actions/connection.database.php");
+/* end of database connection */
 header('Content-Type: text/html; charset=latin9');
 header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
 header("Expires: Sat, 26 Jul 1997 05:00:00 GMT"); // Date in the past
 // set the default timezone to use. Available since PHP 5.1
 date_default_timezone_set('Europe/Madrid');
-$link = new mysqli('codigironanet.ipagemysql.com', 'eguser','2lexivore','english_girona');
-$tlink = new mysqli('codigironanet.ipagemysql.com', 'eguser','2lexivore','english_girona');
 $query = "select * from Languages";
 if ($stmt = $link->prepare($query)) {
 
