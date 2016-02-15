@@ -1,9 +1,12 @@
 <?php
+/* Database connection: $link has a mysqli object */
+require_once("actions/connection.database.php");
+/* end of database connection */
 header('Content-Type: text/html; charset=latin9');
+header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
+header("Expires: Sat, 26 Jul 1997 05:00:00 GMT"); // Date in the past
 // set the default timezone to use. Available since PHP 5.1
 date_default_timezone_set('Europe/Madrid');
-$link = new mysqli('codigironanet.ipagemysql.com', 'eguser','2lexivore','english_girona');
-$tlink = new mysqli('codigironanet.ipagemysql.com', 'eguser','2lexivore','english_girona');
 $query = "select * from Languages";
 if ($stmt = $link->prepare($query)) {
 
@@ -33,7 +36,7 @@ if ($stmt2 = $link->prepare($Site)) {
     $stmt2->execute();
 
     /* bind result variables */
-    $stmt2->bind_result($id, $defLang, $home, $title,$logo);
+    $stmt2->bind_result($id, $defLang, $home, $title,$logo, $facebook, $twitter, $pinterest, $youtube);
 
     /* fetch values */
     $stmt2->fetch();
@@ -41,6 +44,10 @@ if ($stmt2 = $link->prepare($Site)) {
     $conf['home'] = $home;
     $conf['title']=$title;
     $conf['logo']=$logo;
+    $conf['facebook']=$facebook;
+    $conf['twitter']=$twitter;
+    $conf['pinterest']=$pinterest;
+    $conf['youtube']=$youtube;
 
     session_start();
 
@@ -80,6 +87,9 @@ else {
         <title><?= $conf['title']; ?></title>
     </head>
     <body>
+    <?php
+        echo "<!-- Analytics -->\n";
+        include_once("actions/analytics.tracking.php"); ?>
         <!-- The drawer is always open in large screens. The header is always shown,
        even in small screens. -->
      <div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer
@@ -88,8 +98,21 @@ else {
 
          <div class="mdl-layout__header-row" style='margin-top:15px;'>
              <div class='social' style='position:relative; top:-15px;'>
-             <label class='mdl-button mdl-js-button mdl-button--icon'><a href="https://www.facebook.com/englishgironaprofessionalteachers" target="_blank"><i class="mdi mdi-facebook" style="padding-left:5px;margin-right:5px;font-size:20px; position:relative; top:-2px; color:#FFF;"></i></a></label>
-                 <label class='mdl-button mdl-js-button mdl-button--icon'><a href="https://twitter.com/EnglishGirona" target="_blank"><i class="mdi mdi-twitter" style="padding-left:5px;margin-right:5px;font-size:20px; position:relative; top:-2px; color:#FFF;"></i></a></label>
+             <?php
+                 if($conf['facebook']!='') {
+                    echo '<label class="mdl-button mdl-js-button mdl-button--icon"><a href="' . $conf['facebook'] . '" target="_blank"><i class="mdi mdi-facebook" style="padding-left:5px;margin-right:5px;font-size:20px; position:relative; top:-2px; color:#FFF;"></i></a></label>';
+                 }
+                 if($conf['twitter']!='') {
+                     echo '<label class="mdl-button mdl-js-button mdl-button--icon"><a href="'.$conf['twitter'].'" target="_blank"><i class="mdi mdi-twitter" style="padding-left:5px;margin-right:5px;font-size:20px; position:relative; top:-2px; color:#FFF;"></i></a></label>';
+                 }
+                 if($conf['pinterest']!='') {
+                     echo '<label class="mdl-button mdl-js-button mdl-button--icon"><a href="'.$conf['pinterest'].'" target="_blank"><i class="mdi mdi-pinterest" style="padding-left:5px;margin-right:5px;font-size:20px; position:relative; top:-2px; color:#FFF;"></i></a></label>';
+                 }
+                 if($conf['youtube']!='') {
+                     echo '<label class="mdl-button mdl-js-button mdl-button--icon"><a href="'.$conf['youtube'].'" target="_blank"><i class="mdi mdi-youtube" style="padding-left:5px;margin-right:5px;font-size:20px; position:relative; top:-2px; color:#FFF;"></i></a></label>';
+                 }
+                 ?>
+
             </div>
            <div class="mdl-layout-spacer"></div>
            <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable
@@ -270,6 +293,7 @@ else {
 }
 //die();
             if($_GET['section']=="contacte") {
+                //TODO: integrar aixó amb codi específic de la secció, a la BBDDs. Incloure localització per l'avís.
                  echo "<div class='mdl-card mdl-shadow--2dp' style='height:450px'>
 <div class='mdl-card__titleMap'>
 <iframe src='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1482.8058507113278!2d2.8242242509887054!3d41.9871459634068!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12bae6e0b3287aed%3A0x8570bc2991799192!2sEnglish+Girona!5e0!3m2!1sca!2ses!4v1453285682475' width='600' height='450' frameborder='0' style='border:0' allowfullscreen></iframe>
@@ -286,7 +310,8 @@ else {
                     vconeguts=$('#coneguts').val();
                     vcontent=$('#content').val();
                     $.post('/actions/contacte.action.php', {nom: vnom, telf: vtelf, email: vemail, empresa: vempresa, con: vconeguts, comentari: vcontent}).done(function(data) {
-                        alert('Data:' + data);
+                        $('.form-field').val('');
+                        alert('OK. Formulari tramés correctament, gràcies per contactar amb nosaltres.');
                     });
                 });
              });
