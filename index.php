@@ -293,6 +293,7 @@ else {
 }
 //die();
             if($_GET['section']=="contacte") {
+                //TODO: integrar aixó amb codi específic de la secció, a la BBDDs. Incloure localització per l'avís.
                  echo "<div class='mdl-card mdl-shadow--2dp' style='height:450px'>
 <div class='mdl-card__titleMap'>
 <iframe src='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1482.8058507113278!2d2.8242242509887054!3d41.9871459634068!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12bae6e0b3287aed%3A0x8570bc2991799192!2sEnglish+Girona!5e0!3m2!1sca!2ses!4v1453285682475' width='600' height='450' frameborder='0' style='border:0' allowfullscreen></iframe>
@@ -309,7 +310,8 @@ else {
                     vconeguts=$('#coneguts').val();
                     vcontent=$('#content').val();
                     $.post('/actions/contacte.action.php', {nom: vnom, telf: vtelf, email: vemail, empresa: vempresa, con: vconeguts, comentari: vcontent}).done(function(data) {
-                        alert('Data:' + data);
+                        $('.form-field').val('');
+                        alert('OK. Formulari tramés correctament, gràcies per contactar amb nosaltres.');
                     });
                 });
              });
